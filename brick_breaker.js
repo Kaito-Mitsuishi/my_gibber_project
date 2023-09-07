@@ -20,7 +20,8 @@ use('p5')
       bricks[c][r] = brick_score;
     }
   }
-  // let score = 0;
+	let full_score = brick_column * brick_row;
+  let score = 0;
 	let clock = 0.0;
 	/*for marching.js objects*/
   let red_flag = false;
@@ -88,10 +89,10 @@ draw = function(){
       }
     }
   }
-  if ((ball_y + ball_radius == height - 50  && (ball_x >= mouseX - 50 && ball_x <= mouseX + 50)) || (ball_y - ball_radius == 0) ){
+  if ((ball_y + ball_radius == height - 50  && (ball_x >= mouseX - 50 && ball_x <= mouseX + 50)) || (ball_y - ball_radius <= 0) ){
     ball_speed_y  = -ball_speed_y ;
   }
-  if (ball_x - ball_radius == 0 || ball_x + ball_radius == width){
+  if (ball_x - ball_radius <= 0 || ball_x + ball_radius >= width){
     ball_speed_x  = -ball_speed_x ;
   }
   for(let i = 0; i < brick_column; i ++){
@@ -100,7 +101,7 @@ draw = function(){
         if((ball_x + ball_radius == width / 2 - brick_width * brick_column / 2 + brick_width * i || ball_x - ball_radius == width / 2 - brick_width * brick_column / 2 + brick_width * (i + 1)) && (ball_y >= 50 + brick_height * j && ball_y <= 50 + brick_height * (j + 1))){
           bricks[i][j] = 0;
           ball_speed_x = -ball_speed_x;
-          // score += 1;
+          score += 1;
           if(i >= 0 && i <= 7){
             red_light.color.r = 1;
             green_light.color.g = 1;
@@ -118,7 +119,7 @@ draw = function(){
         if((ball_x >= width / 2 - brick_width * brick_column / 2 + brick_width * i && ball_x <= width / 2 - brick_width * brick_column / 2 + brick_width * (i + 1)) && (ball_y - ball_radius == 50 + brick_height * j || ball_y + ball_radius== 50 + brick_height * (j + 1))){
           bricks[i][j] = 0;
           ball_speed_y = -ball_speed_y;
-          //score += 1;
+          score += 1;
           if(i >= 0 && i <= 7){
             red_light.color.r = 1;
             green_light.color.g = 1;
@@ -136,28 +137,6 @@ draw = function(){
       }
     }
   }
-  // if(score >= 10 && ball_speed_x ** 2 == 1){
-    // ball_speed_x *= 2;
-    // ball_speed_y *= 2;
-    // print("higher ball speed")
-  //  }
-  // if(score >= 20 && ball_speed_x ** 2 == 4){
-    // ball_speed_x *= 1.5;
-    // ball_speed_y *= 1.5;
-    // print("highest ball speed")
-  //  }
-  if (ball_y + ball_radius == height){
-    // for(let i = 0; i < brick_column; i ++){
-    //   for (let j = 0; j < brick_row; j++) {
-    //     // if (bricks[i][j]){
-    //     //   bricks[i][j] = 2;
-    //     //   ball_speed_x = 0;
-    //     //   ball_speed_y = 0; 
-    //     // }
-    //   }
-    // }   
-    ball_speed_y  = -ball_speed_y;
-  }
   for(let i = 0; i < brick_column; i ++){
     if (sum_brick_column[i] != brick_row * brick_score){
       for (let j = 0; j < brick_row; j++) {
@@ -171,11 +150,43 @@ draw = function(){
       }
     }
   }
+   if(score >= brick_column * brick_row / 2 && ball_speed_x ** 2 == 1){
+     ball_speed_x *= 2;
+     ball_speed_y *= 2;
+     print("higher ball speed")
+    }
+   //if(score >= 20 && ball_speed_x ** 2 == 4){
+     //ball_speed_x *= 1.5;
+     //ball_speed_y *= 1.5;
+     //print("highest ball speed")
+    //}
+  if (ball_y + ball_radius >= height){
+     for(let i = 0; i < brick_column; i ++){
+       for (let j = 0; j < brick_row; j++) {
+          if (bricks[i][j]){
+            bricks[i][j] = 2; 
+          }
+       }
+     }   
+    ball_speed_x = 0;
+    ball_speed_y = 0;
+    red_light.color.r = 0;
+    green_light.color.g = 0;
+    blue_light.color.b = 0;
+    //ball_speed_y  = -ball_speed_y;
+  }
   clock += QUARTER_PI / 2;
   ball_x += ball_speed_x;
   ball_y += ball_speed_y;
-  //print("Score : ", score);
-}
+  print("Score : ", score);
+  }
+	if(score == full_score){
+    ball_speed_x = 0;
+    ball_speed_y = 0;
+    red_light.color.r = 1;
+    green_light.color.g = 1;
+    blue_light.color.b = 1;
+  }
  //Sphere
   Union2(
     Sphere(sphere_radius).material( mat1 ).translate(sphere_x, sphere_y),
