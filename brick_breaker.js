@@ -26,7 +26,7 @@ use('p5')
     }
   }
 	let full_score = brick_column * brick_row;
-  let score = 0;
+  let score = full_score;
 	let clock = 0.0;
 	/*for marching.js objects*/
   let red_flag = false;
@@ -173,17 +173,17 @@ draw = function(){
     blue_light.color.b = 0;
     //ball_speed_y  = -ball_speed_y;
   }
+  if(score == full_score){
+    ball_speed_x = 0;
+    ball_speed_y = 0;
+    red_light.color.r = 1;
+    green_light.color.g = 1;
+    blue_light.color.b = 1;
+  }
   clock += QUARTER_PI / 2;
   ball_x += ball_speed_x;
   ball_y += ball_speed_y;
   print("Score : ", score);
-  }
-	if(score == full_score){
-    ball_speed_x = 1;
-    ball_speed_y = 1;
-    red_light.color.r = 1;
-    green_light.color.g = 1;
-    blue_light.color.b = 1;
   }
  //Sphere
   Union2(
