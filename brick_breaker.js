@@ -1,13 +1,17 @@
 use('p5')
 /*defining*/
   /*for p5.js objects*/
+	let white = 255;
+	let black = 0;
+	let background_color = black;
+	let other_objects_color = white;
   let ball_x = windowWidth / 2;
   let ball_y = 10;
   let ball_speed_x = 1;
   let ball_speed_y = 1;
   let ball_radius = 5;
   let brick_height = 20;
-  let brick_width = 30;
+  let brick_width = 40;
   let brick_column = 24;
   let brick_row = 12;
 	let brick_score = 1;
@@ -34,7 +38,7 @@ use('p5')
   let light_radius = 2;
   let mat1 = Material( 'phong', Vec3(.05), Vec3(.5), Vec3(1), 8, Vec3(1,50,5) )
   let mat2 = Material( 'phong', Vec3(.05), Vec3(.5), Vec3(1), 8 )
-  Light( Vec3(sphere_x, sphere_y, light_radius * 2), Vec3(1) )
+  white_light = Light( Vec3(sphere_x, sphere_y, light_radius * 2), Vec3(1) )
   red_light = Light(Vec3(sphere_x, sphere_y + light_radius, sphere_z), Vec3(0, 0, 0))
   green_light = Light(Vec3(sphere_x + light_radius * (-sqrt(3) / 2), sphere_y + light_radius * (-1 / 2), sphere_z), Vec3(0, 0, 0))
   blue_light = Light(Vec3(sphere_x + light_radius * (sqrt(3) / 2), sphere_y + light_radius * (-1 / 2), sphere_z), Vec3(0, 0, 0))
@@ -50,12 +54,12 @@ setup = function() {
 resizeCanvas(int(windowWidth), int(windowHeight / 2));
 /*drawing*/
 draw = function(){
-  background(0);
-  fill(255);
+  background(background_color);
+  fill(other_objects_color);
   noStroke();
   circle(ball_x, ball_y, ball_radius * 2);
   rect(mouseX - 50, height - 50, 100, 10);
-  stroke(255);
+  stroke(white);
   for(let i = 0; i < brick_column; i ++){
     sum_brick_column[i] = 0;
     for (let j = 0; j < brick_row; j++) {
@@ -170,9 +174,14 @@ draw = function(){
      }   
     ball_speed_x = 0;
     ball_speed_y = 0;
+    background_color = white;
+    other_objects_color = black;
     red_light.color.r = 0;
     green_light.color.g = 0;
     blue_light.color.b = 0;
+    white_light.color.r = 0;
+    white_light.color.g = 0;
+    white_light.color.b = 0; 
     //ball_speed_y  = -ball_speed_y;
   }
   clock += QUARTER_PI / 2;
@@ -181,8 +190,8 @@ draw = function(){
   print("Score : ", score);
   }
 	if(score == full_score){
-    ball_speed_x = 0;
-    ball_speed_y = 0;
+    ball_speed_x = 1;
+    ball_speed_y = 1;
     red_light.color.r = 1;
     green_light.color.g = 1;
     blue_light.color.b = 1;
