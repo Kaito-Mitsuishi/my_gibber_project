@@ -26,7 +26,7 @@ use('p5')
     }
   }
 	let full_score = brick_column * brick_row;
-  let score = full_score;
+  let score = 0;
 	let clock = 0.0;
 	/*for marching.js objects*/
   let red_flag = false;
