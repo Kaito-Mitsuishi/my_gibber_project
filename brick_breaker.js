@@ -36,7 +36,7 @@ use('p5')
   Light( Vec3(sphere_x, sphere_y, light_radius * 2), Vec3(1) )
   red_light = Light(Vec3(sphere_x, sphere_y + light_radius, sphere_z), Vec3(0, 0, 0))
   green_light = Light(Vec3(sphere_x + light_radius * (-sqrt(3) / 2), sphere_y + light_radius * (-1 / 2), sphere_z), Vec3(0, 0, 0))
-  blue_light = Light(Vec3(sphere_x + light_radius * (sqrt(3) / 2), sphere_y + light_radius * (-1 / 2), sphere_z), Vec3(0, 0, 1))
+  blue_light = Light(Vec3(sphere_x + light_radius * (sqrt(3) / 2), sphere_y + light_radius * (-1 / 2), sphere_z), Vec3(0, 0, 0))
 	/*for audio */
 	drums = EDrums()
   let kick_flag = false;
@@ -176,10 +176,7 @@ draw = function(){
   ball_y += ball_speed_y;
   //print("Score : ", score);
 }
-  // if(red_flag)Light(Vec3(sphere_x, sphere_y + light_radius, sphere_z), Vec3(1, 0, 0))
-  // if(green_flag)Light(Vec3(sphere_x + light_radius * (-sqrt(3) / 2), sphere_y + light_radius * (-1 / 2), sphere_z), Vec3(0, 1, 0))
-  // if(blue_flag)Light(Vec3(sphere_x + light_radius * (sqrt(3) / 2), sphere_y + light_radius * (-1 / 2), sphere_z), Vec3(0, 0, 1))
-  //Sphere
+ //Sphere
   Union2(
     Sphere(sphere_radius).material( mat1 ).translate(sphere_x, sphere_y),
     Plane().material( mat2 ).translate(sphere_x, sphere_y)
