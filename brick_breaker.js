@@ -7,7 +7,7 @@ use('p5')
 	let other_objects_color = white;
 	let brick_side_color = white;
   let ball_x = windowWidth / 2;
-  let ball_y = 10;
+  let ball_y = int(windowHeight / 2) - 100;
   let ball_speed_x = 1;
   let ball_speed_y = 1;
   let ball_radius = 5;
