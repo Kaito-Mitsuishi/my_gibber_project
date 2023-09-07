@@ -43,10 +43,6 @@ use('p5')
   red_light = Light(Vec3(sphere_x, sphere_y + light_radius, sphere_z), Vec3(0, 0, 0))
   green_light = Light(Vec3(sphere_x + light_radius * (-sqrt(3) / 2), sphere_y + light_radius * (-1 / 2), sphere_z), Vec3(0, 0, 0))
   blue_light = Light(Vec3(sphere_x + light_radius * (sqrt(3) / 2), sphere_y + light_radius * (-1 / 2), sphere_z), Vec3(0, 0, 0))
-	/*for audio */
-	drums = EDrums()
-  let kick_flag = false;
-  let hat_flag = false;
 /*setting up*/
 setup = function() {
   createCanvas(int(windowWidth), int(windowHeight / 2));
@@ -147,12 +143,6 @@ draw = function(){
       for (let j = 0; j < brick_row; j++) {
           if (bricks[i][j])bricks[i][j] = brick_score * (brick_score * ( 1 + 0.5 * sin(clock)));
       }
-      if (i == 13){
-        kick_flag = true;
-      }
-      if (i == 16){
-        hat_flag = true;
-      }
     }
   }
    if(score >= brick_column * brick_row / 2 && ball_speed_x ** 2 == 1){
@@ -201,10 +191,3 @@ draw = function(){
     Plane().material( mat2 ).translate(sphere_x, sphere_y)
   )
     .render()
-  // loop();
-  // if (kick_flag){
-  //   kik = Kick().trigger.seq( 1,1/4 )
-  // }
-  // if (hat_flag){
-  //   hat = Hat({ decay:.0125 }).trigger.seq( [ _, 1, _, .5 ], 1/8 )
-  // }
