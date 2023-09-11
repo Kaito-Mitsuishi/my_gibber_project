@@ -1,14 +1,14 @@
 use('p5')
-//use( 'hydra' ).then( init => init() )
 /*defining*/
   /*for p5.js objects*/
+  let half_window_height = int(windowHeight / 2)
 	let white = 255;
 	let black = 0;
 	let background_color = black;
 	let other_objects_color = white;
 	let brick_side_color = white;
   let ball_x = windowWidth / 2;
-  let ball_y = int(windowHeight / 2) - 100;
+  let ball_y = half_window_height - 100;
   let ball_speed_x = 1;
   let ball_speed_y = 1;
   let ball_radius = 5;
@@ -30,18 +30,6 @@ use('p5')
   let score = 0;
 	let clock = 0.0;
   let bar_length = 100;
-  /*for hydra objects*/
-  toggleHydra = function() { 
-    const hydra = document.querySelector('#graphics') 
-    hydra.style.width = windowWidth
-    hydra.style.height = windowHeight
-    hydra.style.top = '500px'
-    if( hydra.style.display === 'block' ) { 
-      hydra.style.display = 'none' 
-    }else{ 
-      hydra.style.display = 'block' 
-    } 
-  }
 	/*for marching.js objects*/
   let red_flag = false;
   let green_flag = false;
@@ -65,10 +53,10 @@ use('p5')
   syn_object.connect( verb_object, .5 )
 /*setting up*/
 setup = function() {
-  createCanvas(int(windowWidth), int(windowHeight / 2));
+  createCanvas(int(windowWidth), half_window_height);
   //noLoop();
 }
-resizeCanvas(int(windowWidth), int(windowHeight / 2));
+resizeCanvas(int(windowWidth), half_window_height);
 /*drawing*/
 draw = function(){
   background(background_color);
@@ -193,18 +181,21 @@ draw = function(){
     background_color = white;
     other_objects_color = black;
     brick_side_color = black;
-    red_light.color.r = 0;
-    green_light.color.g = 0;
-    blue_light.color.b = 0;
-    //ball_speed_y  = -ball_speed_y;
-  }
-  if(score == full_score){
-    toggleHydra();
-    ball_speed_x = 0;
-    ball_speed_y = 0;
     red_light.color.r = 1;
     green_light.color.g = 1;
     blue_light.color.b = 1;
+    //ball_speed_y  = -ball_speed_y;
+  }
+  if(score == full_score){
+    use( 'hydra' ).then( init => init() )
+    /*for hydra objects*/
+    const hydra = document.querySelector('.graphics') 
+    hydra.style.display = 'block'
+    ball_speed_x = 0;
+    ball_speed_y = 0;
+    red_light.color.r = 0;
+    green_light.color.g = 0;
+    blue_light.color.b = 0;
   }
   clock += QUARTER_PI / 2;
   ball_x += ball_speed_x;
