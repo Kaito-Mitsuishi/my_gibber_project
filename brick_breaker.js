@@ -190,7 +190,6 @@ draw = function(){
     use( 'hydra' ).then( init => init() )
     /*for hydra objects*/
     const hydra = document.querySelector('.graphics') 
-    hydra.style.display = 'block'
     ball_speed_x = 0;
     ball_speed_y = 0;
     red_light.color.r = 0;
