@@ -1,4 +1,5 @@
 use('p5')
+//use( 'hydra' ).then( init => init() )
 /*defining*/
   /*for p5.js objects*/
 	let white = 255;
@@ -28,6 +29,19 @@ use('p5')
 	let full_score = brick_column * brick_row;
   let score = 0;
 	let clock = 0.0;
+  let bar_length = 100;
+  /*for hydra objects*/
+  toggleHydra = function() { 
+    const hydra = document.querySelector('#graphics') 
+    hydra.style.width = windowWidth
+    hydra.style.height = windowHeight
+    hydra.style.top = '500px'
+    if( hydra.style.display === 'block' ) { 
+      hydra.style.display = 'none' 
+    }else{ 
+      hydra.style.display = 'block' 
+    } 
+  }
 	/*for marching.js objects*/
   let red_flag = false;
   let green_flag = false;
@@ -43,6 +57,12 @@ use('p5')
   red_light = Light(Vec3(sphere_x, sphere_y + light_radius, sphere_z), Vec3(0, 0, 0))
   green_light = Light(Vec3(sphere_x + light_radius * (-sqrt(3) / 2), sphere_y + light_radius * (-1 / 2), sphere_z), Vec3(0, 0, 0))
   blue_light = Light(Vec3(sphere_x + light_radius * (sqrt(3) / 2), sphere_y + light_radius * (-1 / 2), sphere_z), Vec3(0, 0, 0))
+  /*for audio */
+  syn_brick  = Synth('bleep')
+  verb_brick = Reverb({ input:syn_brick }).connect()
+  verb_object = Bus2().fx.add( Reverb() )
+  syn_object = Synth('square.perc')
+  syn_object.connect( verb_object, .5 )
 /*setting up*/
 setup = function() {
   createCanvas(int(windowWidth), int(windowHeight / 2));
@@ -55,7 +75,7 @@ draw = function(){
   fill(other_objects_color);
   noStroke();
   circle(ball_x, ball_y, ball_radius * 2);
-  rect(mouseX - 50, height - 50, 100, 10);
+  rect(mouseX - 50, height - 50, bar_length, 10);
   stroke(brick_side_color);
   for(let i = 0; i < brick_column; i ++){
     sum_brick_column[i] = 0;
@@ -92,15 +112,18 @@ draw = function(){
   }
   if ((ball_y + ball_radius == height - 50  && (ball_x >= mouseX - 50 && ball_x <= mouseX + 50)) || (ball_y - ball_radius <= 0) ){
     ball_speed_y  = -ball_speed_y ;
+    syn_object.note(0)
   }
   if (ball_x - ball_radius <= 0 || ball_x + ball_radius >= width){
     ball_speed_x  = -ball_speed_x ;
+    syn_object.note(0)
   }
   for(let i = 0; i < brick_column; i ++){
     for (let j = 0; j < brick_row; j++) {
       if (bricks[i][j]){
         if((ball_x + ball_radius == width / 2 - brick_width * brick_column / 2 + brick_width * i || ball_x - ball_radius == width / 2 - brick_width * brick_column / 2 + brick_width * (i + 1)) && (ball_y >= 50 + brick_height * j && ball_y <= 50 + brick_height * (j + 1))){
           bricks[i][j] = 0;
+          syn_brick.note(brick_row - j)
           ball_speed_x = -ball_speed_x;
           score += 1;
           if(i >= 0 && i <= 7){
@@ -119,6 +142,7 @@ draw = function(){
         }
         if((ball_x >= width / 2 - brick_width * brick_column / 2 + brick_width * i && ball_x <= width / 2 - brick_width * brick_column / 2 + brick_width * (i + 1)) && (ball_y - ball_radius == 50 + brick_height * j || ball_y + ball_radius== 50 + brick_height * (j + 1))){
           bricks[i][j] = 0;
+          syn_brick.note(brick_row - j)
           ball_speed_y = -ball_speed_y;
           score += 1;
           if(i >= 0 && i <= 7){
@@ -148,6 +172,7 @@ draw = function(){
    if(score >= brick_column * brick_row / 2 && ball_speed_x ** 2 == 1){
      ball_speed_x *= 2;
      ball_speed_y *= 2;
+     bar_length /= 2;
      print("higher ball speed")
     }
    //if(score >= 20 && ball_speed_x ** 2 == 4){
@@ -174,6 +199,7 @@ draw = function(){
     //ball_speed_y  = -ball_speed_y;
   }
   if(score == full_score){
+    toggleHydra();
     ball_speed_x = 0;
     ball_speed_y = 0;
     red_light.color.r = 1;
@@ -191,3 +217,4 @@ draw = function(){
     Plane().material( mat2 ).translate(sphere_x, sphere_y)
   )
     .render()
+  gradient([1,2,4]).mask(voronoi(5,0.3,0.3),3,0.5).color(1,0,3).invert([0,1]).out(o0)
